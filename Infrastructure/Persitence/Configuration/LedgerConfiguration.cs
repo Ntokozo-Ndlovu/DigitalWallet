@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Infrastructure.DWContext.EntityConfiguration
 {
-    public class LedgerConfiguration: IEntityTypeConfiguration<Ledger>
+    public class LedgerEntryConfiguration: IEntityTypeConfiguration<LedgerEntry>
     {
-        public void Configure(EntityTypeBuilder<Ledger> entity)
+        public void Configure(EntityTypeBuilder<LedgerEntry> entity)
         {
 
         }

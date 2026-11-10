@@ -24,6 +24,13 @@ namespace Domain.Wallet
             this.WalletType = walletType;
             this.Balance = balance;
         }
+       public Wallet(Guid Id,Guid ownerId, string currency, WalletType walletType,decimal balance )
+        {
+            this.OwnerId = ownerId;
+            this.Currency = currency;
+            this.WalletType = walletType;
+            this.Balance = balance;
+        }
         public static Wallet CreateWallet(Guid ownerId, string currency, WalletType walletType)
         {
             if (ownerId == Guid.Empty)

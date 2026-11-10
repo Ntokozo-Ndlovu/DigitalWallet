@@ -19,6 +19,7 @@ namespace Infrastructure.Persitence
         public DbSet<Wallet> Wallet;
         public DbSet<Transaction> Transaction;
         public DbSet<Ledger> Ledger;
+        public DbSet<LedgerEntry> LedgerEntry;
 
     }
 }

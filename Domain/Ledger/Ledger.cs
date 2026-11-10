@@ -9,7 +9,10 @@ namespace Domain.Ledger
     {
         public IReadOnlyList<LedgerEntry> LedgerEntries { get => _ledgerEntries; }
         private List<LedgerEntry> _ledgerEntries { get;  set; }
-        public Ledger() { }
+        public Ledger(List<LedgerEntry> ledgerEntries) {
+            _ledgerEntries = ledgerEntries; 
+        }
+
         public void AppendTransaction(Guid transactionId,Guid fromWalletId, Guid toWalletId,decimal amount)
         {
             if (transactionId == Guid.Empty)
@@ -26,5 +29,7 @@ namespace Domain.Ledger
             _ledgerEntries.Add(toEntry);
             RaiseDomainEvent(new LedgerAddTransaction(Guid.NewGuid(), transactionId));
         }
+      
+       
     }
 }
