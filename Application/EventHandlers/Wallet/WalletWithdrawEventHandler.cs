@@ -26,19 +26,26 @@ namespace Application.EventHandlers.Wallet
         }       
         public async Task HandleAsync(CancellationToken tk,WalletWithdrawalEvent withdrawalEvent)
         {
-            //Transaction needs to go through on the ledger
-            Ledger ledger = await _ledgerRepo.FirstOrDefault();
-            Domain.Wallet.Wallet? walletCash = await _walletRepo.GetCashWallet();   
-            if(walletCash != null)
+            try
             {
-                Guid transactionId = Guid.NewGuid();
-                Transaction cashTransanction = Transaction.CreateTransaction(transactionId,TransactionType.Withdrawal,withdrawalEvent.amount, "Withdrawal"); 
-                Transaction walletTransanction = Transaction.CreateTransaction(transactionId,TransactionType.Withdrawal,withdrawalEvent.amount, "Withdrawal");
-                ledger.AppendTransaction(transactionId,withdrawalEvent.WalletId,walletCash.Id,withdrawalEvent.amount);
-                await _transactionRepo.Add(cashTransanction);
-                await _transactionRepo.Add(walletTransanction);
-                await  _unitOfWork.SaveChanges();
-            
+                //Transaction needs to go through on the ledger
+                Ledger ledger = await _ledgerRepo.FirstOrDefault();
+                Domain.Wallet.Wallet? walletCash = await _walletRepo.GetCashWallet();
+                if (walletCash != null)
+                {
+                    Guid transactionId = Guid.NewGuid();
+                    Transaction cashTransanction = Transaction.CreateTransaction(transactionId, TransactionType.Withdrawal, withdrawalEvent.amount, "Withdrawal");
+                    Transaction walletTransanction = Transaction.CreateTransaction(transactionId, TransactionType.Withdrawal, withdrawalEvent.amount, "Withdrawal");
+                    ledger.AppendTransaction(transactionId, withdrawalEvent.WalletId, walletCash.Id, withdrawalEvent.amount);
+                    await _transactionRepo.Add(cashTransanction);
+                    await _transactionRepo.Add(walletTransanction);
+                    await _unitOfWork.SaveChanges();
+
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             //I need update add the new transactions

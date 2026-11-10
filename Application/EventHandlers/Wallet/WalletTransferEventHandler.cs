@@ -29,6 +29,8 @@ namespace Application.Handlers.Wallet
         }
         public async Task HandleAsync(CancellationToken t, WalletTransferEvent walletEvent)
         {
+            try {
+            
             Guid transactionId = Guid.NewGuid();
             Transaction fromTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Transfer, -walletEvent.Amount,walletEvent.Reference);
             Transaction toTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Transfer,walletEvent.Amount,walletEvent.Reference);
@@ -37,6 +39,11 @@ namespace Application.Handlers.Wallet
             await _transactionRepo.Add(fromTransaction);
             await _transactionRepo.Add(toTransaction);
             await _unitOfWork.SaveChanges();              
+            }
+            catch (Exception ex)
+            {
+
+            }
                        
         }
     }

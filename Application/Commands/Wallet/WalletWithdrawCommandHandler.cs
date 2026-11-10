@@ -4,6 +4,7 @@ using Domain.Wallet;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MediatR;
 
 namespace Application.Commands.Wallet
 {

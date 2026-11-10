@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Application.EventHandlers;
+using MediatR;
 
 namespace Application.Commands.Wallet
 {
-    public class WalletReversalCommandHandler:ICommandHandler<WalletReversalCommand>
+    public class WalletReversalCommandHandler:IRequestHandler<WalletReversalCommand>
     {
         IWalletRepository _walletRepo;
         IEventDispatcher _dispatcher;
@@ -17,7 +18,7 @@ namespace Application.Commands.Wallet
             _walletRepo = walletRepo;
             _dispatcher = dispatcher;
         }
-        public async Task ExecuteAsync(CancellationToken t, WalletReversalCommand cmd)
+        public async Task Handle(WalletReversalCommand cmd,CancellationToken ct)
         {
             try
             {

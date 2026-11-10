@@ -1,13 +1,14 @@
 ﻿using Application.EventHandlers;
 using Domain;
 using Domain.Wallet;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Application.Commands.Wallet
 {
-    public class WalletTransferCommandHandler: ICommandHandler<WalletTransferCommand>
+    public class WalletTransferCommandHandler: IRequestHandler<WalletTransferCommand>
     {
         IWalletRepository _walletRepo;
         IEventDispatcher _eventDispatcher;
@@ -17,7 +18,7 @@ namespace Application.Commands.Wallet
             _walletRepo = walletRepo;
             _eventDispatcher = dispatcher;
         }
-        public async Task ExecuteAsync(CancellationToken tk, WalletTransferCommand cmd)
+        public async Task Handle(WalletTransferCommand cmd,CancellationToken tk)
         {
             Domain.Wallet.Wallet? wallet = await _walletRepo.FirstOrDefault(cmd.FromWalletId);
             try

@@ -7,6 +7,6 @@ namespace Domain.Ledger
     public interface ILedgerRepository
     {
         public Task<Ledger> FirstOrDefault();
-        public Task<LedgerEntry> FindLedgerEntryByTransactionId(Guid transactionId);
+        public Task<List<LedgerEntry>> FindLedgerEntryByTransactionId(Guid transactionId);
     }
 }

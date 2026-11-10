@@ -1,8 +1,9 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Application.Commands.Wallet
 {
-    public record WalletDepositCommand(Guid WalletId,decimal Amount, string Reference);
+    public record WalletDepositCommand(Guid WalletId,decimal Amount, string Reference):IRequest;
 }
