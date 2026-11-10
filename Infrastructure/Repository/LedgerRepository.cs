@@ -5,13 +5,13 @@ using Domain.Ledger;
 
 namespace Infrastructure.Repository
 {
-    public class LedgerRepository: ILedgerRepository,IRepository
+    public class LedgerRepository: ILedgerRepository
     {
         public LedgerRepository()
         {
 
         }
-        public Task<Ledger> FirstOrDefault();
-        public Task<List<LedgerEntry>> FindLedgerEntryByTransactionId(Guid transactionId);
+        public Task<Ledger> FirstOrDefault() { }
+        public Task<List<LedgerEntry>> FindLedgerEntryByTransactionId(Guid transactionId) { }
     }
 }

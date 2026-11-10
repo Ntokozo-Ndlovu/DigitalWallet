@@ -5,7 +5,7 @@ using Domain.Wallet;
 
 namespace Infrastructure.Repository
 {
-    public class WalletRepository:IWalletRepository,IRepository
+    public class WalletRepository:IWalletRepository
     {
 
         public WalletRepository()

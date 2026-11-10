@@ -5,7 +5,7 @@ using Domain.Transaction;
 
 namespace Infrastructure.Repository
 {
-    public class TransactionRepository:ITransactionRepository,IRepository
+    public class TransactionRepository:ITransactionRepository
     {
         public TransactionRepository()
         {
