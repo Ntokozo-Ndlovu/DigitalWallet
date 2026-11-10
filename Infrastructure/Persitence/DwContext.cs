@@ -7,7 +7,7 @@ using Domain.Wallet;
 using Domain.Transaction;
 using Domain.Ledger;
 
-namespace Infrastructure.DWContext
+namespace Infrastructure.Persitence
 {
     public class DwContext:DbContext
     {

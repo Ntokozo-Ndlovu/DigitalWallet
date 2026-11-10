@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Domain.Transaction;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Persitence.Repository
 {
     public class TransactionRepository:ITransactionRepository
     {
-        public TransactionRepository()
+        public TransactionRepository(DwContext context)
         {
 
         }

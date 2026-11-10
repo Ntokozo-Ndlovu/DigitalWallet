@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Domain.Ledger;
+using Infrastructure;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Persitence.Repository
 {
     public class LedgerRepository: ILedgerRepository
     {
-        public LedgerRepository()
+        public LedgerRepository(DwContext context)
         {
 
         }

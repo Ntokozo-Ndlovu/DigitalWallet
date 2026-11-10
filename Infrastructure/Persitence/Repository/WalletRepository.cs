@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Domain.Wallet;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Persitence.Repository
 {
     public class WalletRepository:IWalletRepository
     {
 
-        public WalletRepository()
+        public WalletRepository(DwContext context)
         {
 
         }
