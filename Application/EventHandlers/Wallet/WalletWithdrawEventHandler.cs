@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Domain.Ledger;
 using Domain;
+using Application.Services;
 
 namespace Application.EventHandlers.Wallet
 {
@@ -14,14 +15,20 @@ namespace Application.EventHandlers.Wallet
         ILedgerRepository _ledgerRepo;
         IWalletRepository _walletRepo;
         IUnitOfWork _unitOfWork;
+        ILedgerService _ledgerService;
+        IWalletService _walletService;
         public WalletWithdrawEventHandler(ILedgerRepository ledgeRepository,
             ITransactionRepository transactionRepo,
             IWalletRepository walletRepo,
+            ILedgerService ledgerService,
+            IWalletService walletService,
             IUnitOfWork unitOfWork)
         {
             _ledgerRepo = ledgeRepository;
             _walletRepo = walletRepo; 
             _unitOfWork = unitOfWork;
+            _ledgerService = ledgerService;
+            _walletService = walletService;
             _transactionRepo = transactionRepo;
         }       
         public async Task HandleAsync(CancellationToken tk,WalletWithdrawalEvent withdrawalEvent)
@@ -29,19 +36,14 @@ namespace Application.EventHandlers.Wallet
             try
             {
                 //Transaction needs to go through on the ledger
-                Ledger ledger = await _ledgerRepo.FirstOrDefault();
-                Domain.Wallet.Wallet? walletCash = await _walletRepo.GetCashWallet();
-                if (walletCash != null)
-                {
+                    Ledger ledger = await _ledgerService.GetLedger();
                     Guid transactionId = Guid.NewGuid();
                     Transaction cashTransanction = Transaction.CreateTransaction(transactionId, TransactionType.Withdrawal, withdrawalEvent.amount, "Withdrawal");
                     Transaction walletTransanction = Transaction.CreateTransaction(transactionId, TransactionType.Withdrawal, withdrawalEvent.amount, "Withdrawal");
-                    ledger.AppendTransaction(transactionId, withdrawalEvent.WalletId, walletCash.Id, withdrawalEvent.amount);
+                    ledger.AppendTransaction(transactionId, withdrawalEvent.WalletId, Guid.Empty, withdrawalEvent.amount);
                     await _transactionRepo.Add(cashTransanction);
                     await _transactionRepo.Add(walletTransanction);
                     await _unitOfWork.SaveChanges();
-
-                }
             }
             catch (Exception ex)
             {

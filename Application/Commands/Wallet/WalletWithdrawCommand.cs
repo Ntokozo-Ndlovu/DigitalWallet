@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.DTOs;
 using MediatR;
 
 namespace Application.Commands.Wallet
 {
-    public record WalletWithdrawCommand(Guid WalletId, decimal Amount):IRequest;
+    public record WalletWithdrawCommand(Guid WalletId, decimal Amount):IRequest<WalletDTO>;
 }

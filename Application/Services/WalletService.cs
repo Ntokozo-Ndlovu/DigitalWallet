@@ -7,11 +7,12 @@ using System.Text;
 
 namespace Application.Services
 {
-    public class WalletService {
+    public class WalletService:IWalletService {
         ITransactionRepository _transactionRepo;
         ILedgerRepository _ledgerRepo;
         IWalletRepository _walletRepo;
         private Wallet? _wallet { get; set; }
+        private Wallet? _cashWallet { get; set; }
         public WalletService(ITransactionRepository transactionRepo,
             ILedgerRepository ledgerRepo,
             IWalletRepository walletRepo)
@@ -36,5 +37,6 @@ namespace Application.Services
             }
             return _wallet;
         }
-    }
+
+     }
 }

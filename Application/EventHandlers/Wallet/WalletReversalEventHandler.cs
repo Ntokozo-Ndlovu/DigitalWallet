@@ -3,6 +3,7 @@ using Domain.Wallet;
 using Domain.Transaction;
 using Domain.Ledger;
 using Domain;
+using Application.Services;
 
 namespace Application.EventHandlers.Wallet
 {
@@ -13,8 +14,10 @@ namespace Application.EventHandlers.Wallet
         private IWalletRepository _walletRepo;
         private ILedgerRepository _ledgerRepo;
         private ITransactionRepository _transactionRepo;
+        private ILedgerService _ledgerService;
         public WalletReversalEventHandler(
             IUnitOfWork unitOfWork, 
+            ILedgerService ledgerService,
             IWalletRepository walletRepo,
             ILedgerRepository ledgerRepo,
             ITransactionRepository transactionRepo)
@@ -23,6 +26,7 @@ namespace Application.EventHandlers.Wallet
             _walletRepo = walletRepo;
             _ledgerRepo = ledgerRepo;
             _transactionRepo = transactionRepo;
+            _ledgerService = ledgerService;
         }
       
         public async Task HandleAsync(CancellationToken tk, WalletReversalEvent reversalEvent)
@@ -37,7 +41,7 @@ namespace Application.EventHandlers.Wallet
                 Guid transactionId = Guid.NewGuid();
                 Transaction toTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Reversal,fromLedgerEntry.Amount,"Reversal");
                 Transaction fromTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Reversal,toLedgerEntry.Amount,"Reversal");
-                Ledger ledger = await _ledgerRepo.FirstOrDefault();
+                Ledger ledger = await _ledgerService.GetLedger();
                 ledger.AppendTransaction(transactionId,toLedgerEntry.WalletId,fromLedgerEntry.WalletId,toLedgerEntry.Amount);
                 await _transactionRepo.Add(toTransaction);
                 await _transactionRepo.Add(fromTransaction);

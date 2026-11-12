@@ -22,8 +22,10 @@ namespace Infrastructure.Persitence.Repository
             Wallet? wallet = _dbContext.Wallet.FirstOrDefault(x => x.WalletType == WalletType.System);
             return wallet;
         }
-        public async Task<Wallet?> GetCashWallet() {
-            return null;
+        public async Task<Wallet?> Add(Wallet wallet)
+        {
+            var walletEntityEntry = await _dbContext.Wallet.AddAsync(wallet);
+            return walletEntityEntry.Entity;
         }
-    }
+        }
 }

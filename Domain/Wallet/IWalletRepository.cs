@@ -8,6 +8,6 @@ namespace Domain.Wallet
     {
         public Task<Wallet?> FirstOrDefault(Guid Id);
         public Task<Wallet?> GetSystemWallet();
-        public Task<Wallet?> GetCashWallet();
-    }
+        public Task<Wallet?> Add(Wallet wallet);
+        }
 }

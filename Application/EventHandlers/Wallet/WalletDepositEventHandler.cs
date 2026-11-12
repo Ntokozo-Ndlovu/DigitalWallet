@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Services;
+using Domain;
 using Domain.Ledger;
 using Domain.Transaction;
 using Domain.Wallet;
@@ -13,15 +14,18 @@ namespace Application.EventHandlers.Wallet
         ITransactionRepository _transactionRepo;
         ILedgerRepository _ledgerRepo;
         IWalletRepository _walletRepo;
+        ILedgerService _ledgerService; 
         IUnitOfWork _unitOfWork;
         public WalletDepositEventHandler(IWalletRepository walletRepo,
             ITransactionRepository transactionRepo,
             ILedgerRepository ledgerRepo,
+            ILedgerService ledgerService,
             IUnitOfWork unitOfWork)
         {
             _transactionRepo = transactionRepo;
             _ledgerRepo = ledgerRepo;
             _walletRepo = walletRepo;
+            _ledgerService = ledgerService;
             _unitOfWork = unitOfWork;
         }
 
@@ -29,19 +33,14 @@ namespace Application.EventHandlers.Wallet
         {
             try
             {
-            Ledger ledger = await _ledgerRepo.FirstOrDefault();
-            Domain.Wallet.Wallet? cashWallet = await _walletRepo.GetSystemWallet();//System 
-            
-            if(cashWallet != null)
-            {
+                Ledger ledger = await _ledgerService.GetLedger();  
                 Guid transactionId = Guid.NewGuid();
                 Transaction transaction = Transaction.CreateTransaction(transactionId,TransactionType.Deposit, depositEvent.Amount, depositEvent.Reference); 
-                Transaction systemTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Deposit, depositEvent.Amount, depositEvent.Reference);
-                ledger.AppendTransaction(transactionId,cashWallet.Id, depositEvent.WalletId,depositEvent.Amount);
+                Transaction cashTransaction = Transaction.CreateTransaction(transactionId,TransactionType.Deposit, depositEvent.Amount, depositEvent.Reference);
+                ledger.AppendTransaction(transactionId,Guid.Empty, depositEvent.WalletId,depositEvent.Amount);
                 await _transactionRepo.Add(transaction);
-                await _transactionRepo.Add(systemTransaction);
+                await _transactionRepo.Add(cashTransaction);
                 await _unitOfWork.SaveChanges();
-            }
             }
             catch (Exception e) { }
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Services
 {
-    public class LedgerService
+    public class LedgerService:ILedgerService
     {
        private Ledger? _ledger { set; get; }
         private ILedgerRepository _ledgerRepo; 

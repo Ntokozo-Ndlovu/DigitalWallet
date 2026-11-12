@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Text;
 using Application.EventHandlers;
 using MediatR;
+using Application.DTOs;
 
 namespace Application.Commands.Wallet
 {
-    public class WalletDepositCommandHandler:IRequestHandler<WalletDepositCommand>
+    public class WalletDepositCommandHandler:IRequestHandler<WalletDepositCommand,WalletDTO>
     {
         IWalletRepository _walletRepo;
         IEventDispatcher _domainEventDispatcher;
@@ -18,7 +19,7 @@ namespace Application.Commands.Wallet
             _walletRepo = walletRepo;
             _domainEventDispatcher = domainEventDispatcher;
         } 
-        public async Task Handle(WalletDepositCommand cmd,CancellationToken tx) {
+        public async Task<WalletDTO> Handle(WalletDepositCommand cmd,CancellationToken tx) {
             try
             {
                 Domain.Wallet.Wallet? wallet = await _walletRepo.FirstOrDefault(cmd.WalletId);
@@ -29,11 +30,13 @@ namespace Application.Commands.Wallet
                     await _domainEventDispatcher.DispatchDomainEvents(walletEventsSnapshot);
                     wallet.ClearDomainEvents();
                 }
+              return new WalletDTO(); 
             }
             catch (Exception e)
             {
 
             }
+            return new WalletDTO();
         }
     }
 }
