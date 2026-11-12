@@ -1,12 +1,11 @@
 ﻿using Domain;
 using Domain.Transaction;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Application.DTOs;
+using MediatR;
 
 namespace Application.Commands.Transaction
 {
-    public class TransactionReversalCommadHandler:ICommandHandler<TransactionReversalCommand>{
+    public class TransactionReversalCommadHandler:IRequestHandler<TransactionReversalCommand,TransactionDTO>{
         ITransactionRepository _transactionRepo;
         IEventDispatcher _eventDispatcher;
         IUnitOfWork _unitOfWork;
@@ -17,7 +16,7 @@ namespace Application.Commands.Transaction
             _eventDispatcher = eventDispatcher;
             _unitOfWork = unitOfWork;
         }
-            public async Task ExecuteAsync(CancellationToken tk,TransactionReversalCommand cmd)
+            public async Task<TransactionDTO> Handle(TransactionReversalCommand cmd,CancellationToken tk)
         {
             try {
                 Domain.Transaction.Transaction? transaction = await _transactionRepo.FirstOrDefault(cmd.TransactionId); 
@@ -34,6 +33,7 @@ namespace Application.Commands.Transaction
             {
 
             }
+            return new TransactionDTO();
         }
     }
 }

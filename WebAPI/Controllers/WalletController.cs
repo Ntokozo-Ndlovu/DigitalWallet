@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Transactions;
 using MediatR;
 using Application.Commands.Wallet;
+using Application.Query;
 
 namespace WebAPI.Controllers
 {
@@ -23,11 +24,13 @@ namespace WebAPI.Controllers
             await _sender.Send(cmd);            
             return Ok();
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetWallet(Guid ownerId)
+        [HttpGet("{ownerId}")]
+        public async Task<IActionResult> GetWallet([FromQuery] Guid ownerId)
         {
+            GetWalletQuery query = new GetWalletQuery(Guid.Empty);
+            var wallet = await _sender.Send(query);
            //query wallet 
-            return Ok();
+            return Ok(wallet);
         }
 
 

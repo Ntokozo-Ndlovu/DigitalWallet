@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using MediatR;
+﻿using MediatR;
+using Application.DTOs;
+
 namespace Application.Commands.Transaction
 {
-    public record TransactionReversalCommand(Guid TransactionId):IRequest;
+    public record TransactionReversalCommand(Guid TransactionId):IRequest<TransactionDTO>;
    
 }

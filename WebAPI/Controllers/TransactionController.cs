@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Application.Commands;
+using Application.Commands.Transaction;
 
 namespace WebAPI.Controllers
 {
@@ -6,16 +9,17 @@ namespace WebAPI.Controllers
     [Route("[controller]")]
     public class TransactionController : Controller
     {
-
-        [HttpPost()]     
-         public async Task<IActionResult> Transfer()
+        ISender _sender; 
+        public TransactionController(ISender sender)
         {
-            return Ok();
+            _sender = sender;
         }
 
         [HttpPost("{transactionId}")] 
         public async Task<IActionResult> Reverse(Guid transactionId)
         {
+            TransactionReversalCommand enrichedCmd = new TransactionReversalCommand(transactionId);
+            var wallet =  await _sender.Send(enrichedCmd);
             return Ok();
         }
     }
